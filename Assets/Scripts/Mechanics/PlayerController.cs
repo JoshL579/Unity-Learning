@@ -5,6 +5,7 @@ using Platformer.Gameplay;
 using static Platformer.Core.Simulation;
 using Platformer.Model;
 using Platformer.Core;
+using UnityStandardAssets.CrossPlatformInput;
 
 namespace Platformer.Mechanics
 {
@@ -42,6 +43,8 @@ namespace Platformer.Mechanics
 
         public Bounds Bounds => collider2d.bounds;
 
+        public Joystick joystick;
+
         void Awake()
         {
             health = GetComponent<Health>();
@@ -55,10 +58,11 @@ namespace Platformer.Mechanics
         {
             if (controlEnabled)
             {
-                move.x = Input.GetAxis("Horizontal");
-                if (jumpState == JumpState.Grounded && Input.GetButtonDown("Jump"))
+                // move.x = Input.GetAxis("Horizontal");
+                move.x = joystick.Horizontal;
+                if (jumpState == JumpState.Grounded && CrossPlatformInputManager.GetButtonDown("Jump"))
                     jumpState = JumpState.PrepareToJump;
-                else if (Input.GetButtonUp("Jump"))
+                else if (CrossPlatformInputManager.GetButtonUp("Jump"))
                 {
                     stopJump = true;
                     Schedule<PlayerStopJump>().player = this;
